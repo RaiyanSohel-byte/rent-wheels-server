@@ -64,8 +64,8 @@ async function run() {
 
     // await client.db("admin").command({ ping: 1 });
     console.log("Mongo DB Connected Successfully");
-  } catch {
-    console.log("Mongo DB Connection failed");
+  } catch (error) {
+    console.log("Mongo DB Connection failed", error);
   } finally {
   }
 }
