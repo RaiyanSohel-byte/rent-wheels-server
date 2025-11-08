@@ -4,7 +4,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 const cors = require("cors");
 
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const uri = `mongodb+srv://${process.env.DB_NAME}:${process.env.DB_PASS}@cluster0.lyk9xse.mongodb.net/?appName=Cluster0`;
 
 const client = new MongoClient(uri, {
@@ -33,6 +33,12 @@ async function run() {
         query.email = email;
       }
       const result = await carsCollection.find(query).toArray();
+      res.send(result);
+    });
+    app.delete("/cars/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await carsCollection.deleteOne(query);
       res.send(result);
     });
 
