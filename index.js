@@ -21,6 +21,8 @@ const carsCollection = carsDB.collection("carsCollection");
 async function run() {
   try {
     await client.connect();
+
+    //cars api
     app.post("/cars", async (req, res) => {
       const newCar = req.body;
       const result = await carsCollection.insertOne(newCar);
