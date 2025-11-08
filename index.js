@@ -17,12 +17,12 @@ const client = new MongoClient(uri, {
   },
 });
 
-const carsDB = client.db("carsDB");
-const carsCollection = carsDB.collection("carsCollection");
-
 async function run() {
   try {
     await client.connect();
+
+    const carsDB = client.db("carsDB");
+    const carsCollection = carsDB.collection("carsCollection");
 
     //cars api
     app.post("/cars", async (req, res) => {
