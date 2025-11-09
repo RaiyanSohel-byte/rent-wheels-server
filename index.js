@@ -72,6 +72,15 @@ async function run() {
       const result = await bookingsCollection.insertOne(newBooking);
       res.send(result);
     });
+    app.get("/bookings", async (req, res) => {
+      const email = req.query.email;
+      const query = {};
+      if (email) {
+        query.email = email;
+      }
+      const result = await bookingsCollection.find(query).toArray();
+      res.send(result);
+    });
     // await client.db("admin").command({ ping: 1 });
     console.log("Mongo DB Connected Successfully");
   } catch (error) {
