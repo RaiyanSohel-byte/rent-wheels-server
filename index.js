@@ -23,7 +23,7 @@ async function run() {
 
     const carsDB = client.db("carsDB");
     const carsCollection = carsDB.collection("carsCollection");
-
+    const bookingsCollection = carsDB.collection("bookingsCollection");
     //cars api
     app.post("/cars", async (req, res) => {
       const newCar = req.body;
@@ -31,16 +31,16 @@ async function run() {
       res.send(result);
     });
     app.get("/cars", async (req, res) => {
-      const email = req.query.email;
+      const email = req.query.provider_email;
       const query = {};
       if (email) {
-        query.email = email;
+        query.provider_email = email;
       }
       const result = await carsCollection.find(query).toArray();
       res.send(result);
     });
     app.get("/latestCars", async (req, res) => {
-      const cursor = carsCollection.find().sort({ time: -1 }).limit(6);
+      const cursor = carsCollection.find().sort({ posted_at: -1 }).limit(6);
       const result = await cursor.toArray();
       res.send(result);
     });
@@ -67,6 +67,11 @@ async function run() {
       res.send(result);
     });
 
+    app.post("/bookings", async (req, res) => {
+      const newBooking = req.body;
+      const result = await bookingsCollection.insertOne(newBooking);
+      res.send(result);
+    });
     // await client.db("admin").command({ ping: 1 });
     console.log("Mongo DB Connected Successfully");
   } catch (error) {
