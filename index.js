@@ -39,6 +39,13 @@ async function run() {
       const result = await carsCollection.find(query).toArray();
       res.send(result);
     });
+    app.get("/search", async (req, res) => {
+      const searchText = req.query.search;
+      const result = await carsCollection
+        .find({ carName: { $regex: searchText, $options: "i" } })
+        .toArray();
+      res.send(result);
+    });
     app.get("/latestCars", async (req, res) => {
       const cursor = carsCollection.find().sort({ posted_at: -1 }).limit(6);
       const result = await cursor.toArray();
@@ -73,14 +80,13 @@ async function run() {
       res.send(result);
     });
     app.get("/bookings", async (req, res) => {
-      const email = req.query.email;
+      const { email } = req.query;
       const query = {};
-      if (email) {
-        query.email = email;
-      }
+      if (email) query["bookedBy.userEmail"] = email;
       const result = await bookingsCollection.find(query).toArray();
       res.send(result);
     });
+
     // await client.db("admin").command({ ping: 1 });
     console.log("Mongo DB Connected Successfully");
   } catch (error) {
