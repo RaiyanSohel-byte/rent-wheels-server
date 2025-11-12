@@ -6,7 +6,12 @@ const port = process.env.PORT || 3000;
 //firebase admin
 const admin = require("firebase-admin");
 
-const serviceAccount = require("./firebase-admin.json");
+// index.js
+const decoded = Buffer.from(
+  process.env.FIREBASE_SERVICE_KEY,
+  "base64"
+).toString("utf8");
+const serviceAccount = JSON.parse(decoded);
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
@@ -46,7 +51,7 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
-    await client.connect();
+    // await client.connect();
 
     const carsDB = client.db("carsDB");
     const carsCollection = carsDB.collection("carsCollection");
